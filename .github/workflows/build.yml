@@ -14,7 +14,7 @@ jobs:
           flutter-version: '3.22.2'
           channel: 'stable'
       - run: flutter pub get
-      - run: flutter build apk --release
+- run: flutter build apk --release --no-pub
 
   build-ios:
     runs-on: macos-latest
