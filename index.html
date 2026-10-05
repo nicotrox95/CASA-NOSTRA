@@ -21,7 +21,8 @@ input,select,textarea{width:100%;background:var(--bg);border:1px solid var(--bd)
 .logo{width:48px;height:48px;border-radius:12px;display:grid;place-items:center;color:#fff;font-weight:800;font-size:17px;flex:none;overflow:hidden}.logo img{width:100%;height:100%;object-fit:contain;background:#fff}
 .ov{position:fixed;inset:0;background:#fff;color:#111;z-index:9;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center}.ov svg{max-width:100%;height:auto}.ov .logo{width:84px;height:84px;font-size:30px;margin-bottom:10px}
 .sw{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--bd)}.code{font:700 26px ui-monospace,monospace;letter-spacing:.14em;background:var(--ac2);color:var(--ac);padding:10px;border-radius:12px;display:inline-block}.empty{text-align:center;color:var(--mu);padding:22px}
-.bar{height:10px;background:var(--bd);border-radius:6px;overflow:hidden;margin:6px 0}.bar i{display:block;height:100%;background:var(--ac)}.err{color:var(--er);font-size:14px;min-height:20px}
+.bar{height:10px;background:var(--bd);border-radius:6px;overflow:hidden;margin:6px 0}.bar i{display:block;height:100%;background:var(--ac)}.bgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-height:250px;overflow:auto;margin-top:6px}.bb{background:var(--bg);border:1px solid var(--bd);border-radius:12px;padding:8px 4px;text-align:center;cursor:pointer;font-size:12px}.bb .logo{margin:0 auto 4px;width:40px;height:40px}
+.err{color:var(--er);font-size:14px;min-height:20px}
 </style></head><body><div id="app"><p class="empty">Caricamento…</p></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jsbarcode/3.11.6/JsBarcode.all.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
@@ -42,10 +43,85 @@ const CAT={"🥬 Frutta e verdura":"Mele,Banane,Arance,Limoni,Pomodori,Insalata,
 "🧴 Igiene":"Shampoo,Bagnoschiuma,Dentifricio,Spazzolino,Assorbenti,Pannolini,Salviette,Deodorante",
 "🪑 Ikea":"Candele,Cornici,Scatole contenitore,Lampadine,Appendiabiti,Tende,Teglie",
 "🔧 Ferramenta":"Viti,Chiodi,Nastro adesivo,Lampadina LED,Colla,Punte trapano,Guanti da lavoro,Silicone,Tasselli"};
-const STORES={esselunga:["#e30613","E"],coop:["#e2001a","coop"],conad:["#e4032e","C"],carrefour:["#004e9f","C"],lidl:["#0050aa","L"],eurospin:["#0a3d91","E"],md:["#e30613","MD"],pam:["#d71920","P"],penny:["#cd1719","PN"],aldi:["#00005f","A"],ikea:["#0058a3","IK"],decathlon:["#0082c3","D"],"leroy merlin":["#78be20","LM"],bricoman:["#f58220","B"],obi:["#f26722","OBI"],douglas:["#111","D"],sephora:["#111","S"],mediaworld:["#d70000","MW"],unieuro:["#f26522","U"],feltrinelli:["#d71920","LF"],tigotà:["#e2007a","T"],tigota:["#e2007a","T"],acqua:["#00a0e3","A&S"],"q8":["#0a4ea2","Q8"],eni:["#ffd400","eni"],ip:["#d71920","IP"]};
+const BR=`Esselunga|e30613|E
+Coop|e2001a|coop
+Conad|e4032e|C
+Carrefour|004e9f|C
+Lidl Plus|0050aa|L|Q
+Eurospin|0a3d91|E
+MD|e30613|MD
+Pam|d71920|P
+Penny|cd1719|PN
+Aldi|00005f|A
+Despar|00a651|D
+Famila|d4001a|F
+Bennet|e30613|B
+Tigros|e30613|T
+Todis|f5a800|T
+Crai|e30613|CR
+Eataly|111111|E
+NaturaSì|6ab023|N
+Il Gigante|e30613|IG
+Iper|e30613|I
+Decathlon|0082c3|D
+Intersport|e30613|IS
+Foot Locker|111111|FL
+IKEA Family|0058a3|IK
+Leroy Merlin|78be20|LM
+Bricoman|f58220|B
+OBI|f26722|OBI
+Brico io|e30613|BI
+Bricocenter|f58220|BC
+Mondo Convenienza|e30613|MC
+Maisons du Monde|111111|MD
+Kasanova|e30613|K
+Douglas|111111|D
+Sephora|111111|S
+Kiko|e30613|K
+Tigotà|e2007a|T
+Acqua & Sapone|00a0e3|A&S
+Yves Rocher|2d8c3c|YR
+Rossmann|c8102e|R
+Lush|111111|L
+MediaWorld|d70000|MW
+Unieuro|f26522|U
+Euronics|e30613|E
+Expert|0057a6|X
+Trony|e30613|T
+la Feltrinelli|d71920|LF
+Mondadori Store|111111|M
+Libraccio|e30613|L
+Giunti al Punto|e30613|G
+Zara|111111|Z
+H&M|e50010|H&M
+OVS|e30613|OVS
+Calzedonia|e30613|CZ
+Intimissimi|111111|IN
+Tezenis|e30613|TZ
+Benetton|009a44|B
+Geox|e30613|G
+Pittarosso|e30613|PR
+Toys Center|e30613|TC
+Prénatal|e2007a|P
+Arcaplanet|0072bc|AP
+Maxi Zoo|e30613|MZ
+Q8|0a4ea2|Q8
+Eni Live|ffd400|eni
+IP|d71920|IP
+Tamoil|e30613|T
+Esso|0050aa|E
+Shell|ffd500|S
+Autogrill|e30613|AG
+Burger King|d62300|BK
+McDonald's|db0007|M
+Starbucks|00704a|S
+Trenitalia|e30613|TI
+Italo Più|9c1a2f|IT
+Farmacia|2d8c3c|Rx`.split('\n').map(l=>l.split('|'));
+const STORES={};BR.forEach(([n,c,i,h])=>STORES[n.toLowerCase()]=['#'+c,i,h]);
 const SEL=s=>s.split(',');
 const MODS=[
-{id:'card',n:'Carte Fedeltà',i:'💳',f:[['t','Negozio'],['code','Numero tessera / codice'],['bt','Tipo codice','sel','CODE128,EAN13,CODE39,QR'],['who','Titolare']]},
+{id:'card',n:'Carte Fedeltà',i:'💳',f:[['t','Negozio'],['code','Numero tessera / codice'],['bt','Tipo codice','sel','Automatico,CODE128,EAN13,CODE39,QR'],['who','Titolare']]},
 {id:'list',n:'Liste Condivise',i:'🛒',f:[],chk:1},
 {id:'agenda',n:'Agenda & Calendario',i:'📅',f:[['t','Impegno'],['d','Quando','datetime-local'],['who','Per chi']],date:1},
 {id:'turni',n:'Turni di Lavoro',i:'🕒',f:[['who','Membro'],['d','Giorno','date'],['t','Turno (es. 14:00–22:00)']],date:1,nodue:1},
@@ -66,7 +142,10 @@ const fam=()=>'families/'+S.code,col=()=>collection(db,fam()+'/items'),nid=()=>'
 const days=d=>d?Math.ceil((new Date(d.length>10?d:d+'T00:00')-Date.now())/864e5):null;
 const chipDue=d=>{const n=days(d);if(n===null)return'';return`<span class="chip ${n<0?'er':n<=30?'wa':'ok'}">${n<0?'Scaduto':n===0?'Oggi':n===1?'Domani':'tra '+n+' gg'}</span>`};
 const fmt=d=>{if(!d)return'';const x=new Date(d.length>10?d:d+'T12:00');return x.toLocaleDateString('it-IT',{day:'numeric',month:'short',year:'numeric'})+(d.length>10?' '+x.toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'}):'')};
-const logo=i=>{if(i.logo)return`<div class="logo"><img alt="" src="${esc(i.logo)}"></div>`;const k=Object.keys(STORES).find(k=>(i.t||'').toLowerCase().includes(k)),s=STORES[k]||['#6b5f55',(i.t||'?').slice(0,2).toUpperCase()];return`<div class="logo" style="background:${s[0]};${k==='eni'?'color:#111':''}">${esc(s[1])}</div>`};
+const lum=c=>parseInt(c.slice(1,3),16)*.3+parseInt(c.slice(3,5),16)*.59+parseInt(c.slice(5,7),16)*.11;
+const findB=t=>{const n=(t||'').toLowerCase().trim();return STORES[n]?n:Object.keys(STORES).find(k=>k.length>3&&n.length>3&&(n.includes(k)||k.includes(n)))};
+const logo=i=>{if(i.logo)return`<div class="logo"><img alt="" src="${esc(i.logo)}"></div>`;const s=STORES[findB(i.t)]||['#6b5f55',(i.t||'?').slice(0,2).toUpperCase()];return`<div class="logo" style="background:${s[0]};color:${lum(s[0])>170?'#111':'#fff'};font-size:${s[1].length>2?12:17}px">${esc(s[1])}</div>`};
+const fmtOf=i=>{const c=(i.code||'').trim(),b=i.bt;if(b&&b!=='Automatico')return b;if(/^[a-z]+:\/\//i.test(c)||c.length>40||/[^\x20-\x7e]/.test(c))return'QR';if(/^\d{13}$/.test(c))return'EAN13';if(/^\d{8}$/.test(c))return'EAN8';return STORES[findB(i.t)]?.[2]==='Q'?'QR':'CODE128'};
 let unsubs=[];
 const authUI=(msg='')=>$.innerHTML=`<div class="center"><h1>🏠 Casa Nostra</h1><p class="sub">Accedi per entrare nella tua famiglia</p><input id="em" type="email" placeholder="Email" autocomplete="username"><input id="pw" type="password" placeholder="Password (min. 8 caratteri)" autocomplete="current-password"><p class="err" id="er">${msg}</p><button class="btn" style="width:100%" data-a="login">Accedi</button><button class="btn g" style="width:100%;margin-top:8px" data-a="reg">Crea account</button><button class="btn g" style="width:100%;margin-top:8px" data-a="goog">Continua con Google</button><p><a href="#" data-a="reset" class="sub">Password dimenticata?</a></p></div>`;
 onAuthStateChanged(auth,async u=>{unsubs.forEach(f=>f());unsubs=[];S.u=u;S.code=null;if(!u)return authUI();
@@ -85,7 +164,7 @@ function home(){const up=[];en().forEach(m=>{if(!m.date||m.nodue)return;S.items.
   $.innerHTML=`<div class="top"><div><h1>🏠 Casa Nostra</h1><div class="sub">Il vostro hub di famiglia</div></div><button class="ic" data-a="go" data-v="set">⚙️</button></div>${u.length?'<h2>In arrivo</h2>'+u.map(({m,i,n,t})=>`<div class="card"><span style="font-size:22px">${m.i}</span><div class="m"><div class="t">${esc(t||i.t||i.k||i.who)}</div>${chipDue(i.d)}<span class="chip">${esc(fmt(i.d))}</span></div></div>`).join(''):''}${'Notification'in window&&Notification.permission==='default'?'<div class="card"><div class="m">🔔 Attiva i promemoria: 30, 15 e 5 giorni prima e il giorno della scadenza</div><button class="btn" data-a="notif">Attiva</button></div>':''}<h2>Le vostre schede</h2><div class="grid">${en().map(m=>{const c=S.items.filter(i=>i.m===m.id&&!(m.chk&&i.done)).length;return`<button class="tile" data-a="go" data-v="${m.id}"><span>${m.i}</span><b>${m.n}</b><small>${c} ${c===1?'voce':'voci'}</small></button>`}).join('')}</div>`}
 const head=(m,btn=1)=>`<div class="top"><button class="ic" data-a="go" data-v="${S.view==='veh'?'veic':'home'}">← Indietro</button><h1 style="font-size:19px">${m.i} ${m.n}</h1>${btn?'<button class="btn" data-a="add">＋</button>':'<span></span>'}</div>`;
 const field=([k,l,t,o],first)=>`<div><label>${l}</label>${t==='sel'?`<select name="${k}"><option value="">—</option>${SEL(o).map(x=>`<option>${esc(x)}</option>`).join('')}</select>`:t==='area'?`<textarea name="${k}" rows="4"></textarea>`:`<input name="${k}" type="${t||'text'}" ${t==='number'?'step="0.01" inputmode="decimal"':''} ${k==='t'&&first?'list="stl"':''} ${first?'required':''} maxlength="400">`}</div>`;
-const formH=(m,fs)=>S.form?`<form class="f" data-a="save">${fs.map((f,i)=>field(f,i===0)).join('')}${m.id==='card'&&'BarcodeDetector'in window?'<button type="button" class="btn g" data-a="scan">📷 Scansiona il codice con la fotocamera</button>':''}${m.id==='card'?'<div><label>Logo personalizzato (facoltativo)</label><input type="file" accept="image/*" id="lg"></div><datalist id="stl">'+Object.keys(STORES).map(k=>`<option>${k[0].toUpperCase()+k.slice(1)}`).join('')+'</datalist>':''}<div style="display:flex;gap:8px"><button class="btn">Salva</button><button type="button" class="btn g" data-a="add">Annulla</button></div></form>`:'';
+const formH=(m,fs)=>S.form?`<form class="f" data-a="save">${m.id==='card'?'<div><label>Scegli il marchio o scrivi il nome sotto</label><input id="brs" placeholder="🔍 Cerca marchio…" autocomplete="off"><div class="bgrid">'+BR.map(b=>`<button type="button" class="bb" data-a="brand" data-n="${esc(b[0])}">${logo({t:b[0]})}${esc(b[0])}</button>`).join('')+'</div></div>':''}${fs.map((f,i)=>field(f,i===0)).join('')}${m.id==='card'&&'BarcodeDetector'in window?'<button type="button" class="btn g" data-a="scan">📷 Scansiona il codice con la fotocamera</button>':''}${m.id==='card'?'<div><label>Logo personalizzato (facoltativo)</label><input type="file" accept="image/*" id="lg"></div><datalist id="stl">'+Object.keys(STORES).map(k=>`<option>${k[0].toUpperCase()+k.slice(1)}`).join('')+'</datalist>':''}<div style="display:flex;gap:8px"><button class="btn">Salva</button><button type="button" class="btn g" data-a="add">Annulla</button></div></form>`:'';
 const del=id=>`<button class="btn r" data-a="del" data-id="${id}" aria-label="Elimina">✕</button>`;
 function modView(m){const its=S.items.filter(i=>i.m===m.id);
   if(m.id==='card')return cards(m,its);if(m.id==='list')return lists(m,its);if(m.id==='veic')return vehs(m,its);if(m.id==='ric')return recipes(m,its);
@@ -109,8 +188,8 @@ function recipes(m,its){const cur=its.filter(i=>(i.k||'Tradizionale')===S.tab);
   $.innerHTML=head(m)+`<div class="tabs">${['Tradizionale','Bimby'].map(t=>`<button class="chip ${S.tab===t?'on':''}" data-a="tab" data-v="${t}">${t==='Bimby'?'🌀 Bimby':'🍳 Tradizionali'}</button>`).join('')}</div>`+formH(m,m.f)+(cur.map(i=>`<div class="card" style="align-items:flex-start"><div class="m"><div class="t">${esc(i.t)}</div>${i.cat?`<span class="chip">${esc(i.cat)}</span>`:''}${i.bm?`<span class="chip">🌀 ${esc(i.bm)}</span>`:''}<details><summary class="sub">Apri ricetta</summary><p><b>Ingredienti</b><br>${esc(i.ing).replace(/\n/g,'<br>')}</p><p><b>Procedimento</b><br>${esc(i.st).replace(/\n/g,'<br>')}</p></details></div>${del(i.id)}</div>`).join('')||'<p class="empty">Nessuna ricetta in questa sezione</p>')}
 function settings(){$.innerHTML=head({i:'⚙️',n:'Impostazioni'},0)+`<h2>Codice famiglia</h2><div class="card" style="display:block;text-align:center"><div class="code">${esc(S.code)}</div><p class="sub">Chi lo inserisce entra nella famiglia: condividilo solo con persone fidate.</p></div><h2>Promemoria scadenze</h2><div class="card" style="display:block"><p class="sub">Avvisi a 30, 15, 5 giorni e il giorno della scadenza. ${'Notification'in window?(Notification.permission==='granted'?'✅ Notifiche attive sul dispositivo.':'<button class="btn" data-a="notif">Attiva notifiche</button>'):'Notifiche non supportate qui.'}</p><button class="btn g" data-a="ics">📆 Aggiungi al calendario del telefono (.ics)</button></div><h2>Schede visibili</h2><div class="card" style="display:block;padding:4px 14px">${MODS.map(m=>`<div class="sw"><span>${m.i} ${m.n}</span><input type="checkbox" data-a="vis" data-id="${m.id}" ${S.cfg.hidden.includes(m.id)?'':'checked'}></div>`).join('')}</div><button class="btn g" style="width:100%;margin-top:12px" data-a="leave">Esci dalla famiglia</button><button class="btn g" style="width:100%;margin-top:8px" data-a="out">Disconnetti account</button>`}
 function showCode(i){const ov=document.createElement('div');ov.className='ov';ov.dataset.a='close';ov.innerHTML=`${logo(i)}<h1>${esc(i.t)}</h1><p class="sub">${esc(i.who||'')}</p><svg id="bcs"></svg><div style="font:700 26px ui-monospace,monospace;letter-spacing:.12em;margin-top:6px;overflow-wrap:anywhere">${esc(i.code||'')}</div><p class="sub">Tocca per chiudere</p>`;document.body.append(ov);
-  if(i.bt==='QR'){try{const q=qrcode(0,'M');q.addData(i.code||'');q.make();ov.querySelector('#bcs').outerHTML='<div style="width:min(80vw,320px)">'+q.createSvgTag({cellSize:8,margin:2,scalable:true})+'</div>'}catch(e){}return}
-  try{JsBarcode(ov.querySelector('#bcs'),i.code,{format:i.bt||'CODE128',width:2.6,height:110,displayValue:false,margin:10})}catch(e){try{JsBarcode(ov.querySelector('#bcs'),i.code,{format:'CODE128',width:2.6,height:110,displayValue:false})}catch(_){ov.querySelector('#bcs').remove()}}}
+  const F=fmtOf(i);if(F==='QR'){try{const q=qrcode(0,'M');q.addData(i.code||'');q.make();ov.querySelector('#bcs').outerHTML='<div style="width:min(80vw,320px)">'+q.createSvgTag({cellSize:8,margin:2,scalable:true})+'</div>'}catch(e){}return}
+  try{JsBarcode(ov.querySelector('#bcs'),i.code,{format:F,width:2.6,height:110,displayValue:false,margin:10})}catch(e){try{JsBarcode(ov.querySelector('#bcs'),i.code,{format:'CODE128',width:2.6,height:110,displayValue:false})}catch(_){ov.querySelector('#bcs').remove()}}}
 const deadlines=()=>{const r=[];MODS.filter(m=>m.date&&!m.nodue&&m.id!=='agenda'&&!S.cfg.hidden.includes(m.id)).forEach(m=>S.items.filter(i=>i.m===m.id&&!i.done&&i.d).forEach(i=>r.push({id:i.id,t:m.i+' '+(m.id==='doc'?i.k+(i.who?' · '+i.who:''):i.t||i.k||i.who),d:i.d.slice(0,10)})));
   if(!S.cfg.hidden.includes('veic'))S.items.filter(i=>i.m==='vsc'&&i.d).forEach(i=>r.push({id:i.id,t:'🚗 '+vname(i),d:i.d}));return r};
 async function checkNotifs(){if(!('Notification'in window)||Notification.permission!=='granted'||!S.code)return;let seen={};try{seen=JSON.parse(localStorage.cn_n||'{}')}catch{}let ch=0;
@@ -132,6 +211,7 @@ async function scan(){const ov=document.createElement('div');ov.className='ov';o
     while(go){const r=await d.detect(v).catch(()=>[]);if(r[0]){const f=document.querySelector('[name=code]'),b=document.querySelector('[name=bt]');if(f)f.value=r[0].rawValue;if(b)b.value=M[r[0].format]||'CODE128';stop();break}await new Promise(x=>setTimeout(x,250))}}
   catch(e){stop();alert('Fotocamera non disponibile: inserisci il codice a mano.')}}
 const A={
+ brand(t){const f=document.querySelector('[name=t]');f.value=t.dataset.n;document.querySelector('[name=code]')?.focus()},
  scan(){scan()},
  async notif(){const r=await Notification.requestPermission();if(r==='granted')await checkNotifs();render()},ics(){ics()},
  async login(){try{await signInWithEmailAndPassword(auth,em.value,pw.value)}catch(e){er.textContent='Credenziali non valide.'}},
@@ -152,6 +232,7 @@ const A={
 const addQ=q=>{q=q.trim();if(q)setDoc(doc(db,fam()+'/items/'+nid()),{m:'list',t:q.slice(0,80),grp:S.lst,done:false,at:Date.now(),by:S.u.uid})};
 document.addEventListener('click',async e=>{const t=e.target.closest('[data-a]');if(!t||t.tagName==='FORM'||t.tagName==='OPTION')return;if(t.tagName==='A')e.preventDefault();if(t.type==='checkbox'&&e.type!=='click')return;
   try{await A[t.dataset.a]?.(t)}catch(x){alert('Operazione non riuscita: '+(x.code||x.message))}});
+document.addEventListener('input',e=>{if(e.target.id!=='brs')return;const q=e.target.value.toLowerCase();document.querySelectorAll('.bb').forEach(b=>b.style.display=b.dataset.n.toLowerCase().includes(q)?'':'none')});
 document.addEventListener('change',e=>{if(e.target.id!=='lg'||!e.target.files[0])return;const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const c=document.createElement('canvas');c.width=c.height=160;const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,160,160);const s=Math.min(160/im.width,160/im.height);x.drawImage(im,(160-im.width*s)/2,(160-im.height*s)/2,im.width*s,im.height*s);S.logo=c.toDataURL('image/webp',.85)};im.src=r.result};r.readAsDataURL(e.target.files[0])});
 document.addEventListener('submit',async e=>{e.preventDefault();const f=e.target,a=f.dataset.a;
   try{if(a==='qa'){addQ(f.q.value);f.q.value='';return}
