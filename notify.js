@@ -1,7 +1,8 @@
 process.env.TZ='Europe/Rome';
 const mail=process.env.GMAIL_USER&&process.env.GMAIL_APP_PASSWORD?require('nodemailer').createTransport({service:'gmail',auth:{user:process.env.GMAIL_USER,pass:process.env.GMAIL_APP_PASSWORD}}):null;
 const admin=require('firebase-admin');
-const loadSA=raw=>{let sa;try{sa=JSON.parse(raw)}catch(e){const fixed=raw.replace(/("private_key"\s*:\s*")([\s\S]*?)("\s*,\s*"client_email")/,(m,x,y,z)=>x+y.replace(/\r?\n/g,'\\n')+z);sa=JSON.parse(fixed)}if(sa.private_key)sa.private_key=sa.private_key.replace(/\\n/g,'\n');return sa};
+const fixKey=k=>{const m=String(k).match(/-----BEGIN PRIVATE KEY-----([\s\S]*?)-----END PRIVATE KEY-----/);if(!m)return k;const body=m[1].replace(/\\n/g,'').replace(/[^A-Za-z0-9+\/=]/g,'');return '-----BEGIN PRIVATE KEY-----\n'+body.match(/.{1,64}/g).join('\n')+'\n-----END PRIVATE KEY-----\n'};
+const loadSA=raw=>{let sa;try{sa=JSON.parse(raw)}catch(e){const fixed=raw.replace(/("private_key"\s*:\s*")([\s\S]*?)("\s*,\s*"client_email")/,(m,x,y,z)=>x+y.replace(/\r?\n/g,'\\n')+z);sa=JSON.parse(fixed)}if(sa.private_key)sa.private_key=fixKey(sa.private_key);return sa};
 admin.initializeApp({credential:admin.credential.cert(loadSA(process.env.FIREBASE_SERVICE_ACCOUNT))});
 const db=admin.firestore(),hr=new Date().getHours();
 if((hr<7||hr>=22)&&!process.env.FORCE&&!process.env.TEST){console.log('Fuori orario: nessun invio');process.exit(0)}
