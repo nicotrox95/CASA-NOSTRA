@@ -1,7 +1,7 @@
 process.env.TZ='Europe/Rome';
 const mail=process.env.GMAIL_USER&&process.env.GMAIL_APP_PASSWORD?require('nodemailer').createTransport({service:'gmail',auth:{user:process.env.GMAIL_USER,pass:process.env.GMAIL_APP_PASSWORD}}):null;
 const admin=require('firebase-admin');
-const fixKey=k=>{const m=String(k).match(/-----BEGIN PRIVATE KEY-----([\s\S]*?)-----END PRIVATE KEY-----/);if(!m)return k;const body=m[1].replace(/\\n/g,'').replace(/[^A-Za-z0-9+\/=]/g,'');return '-----BEGIN PRIVATE KEY-----\n'+body.match(/.{1,64}/g).join('\n')+'\n-----END PRIVATE KEY-----\n'};
+const fixKey=k=>{const t=String(k).replace(/\\[nr]/g,'\n'),m=t.match(/BEGIN[ A-Z]*PRIVATE KEY[^A-Za-z0-9+\/=]*([\s\S]*?)[^A-Za-z0-9+\/=]*END[ A-Z]*PRIVATE KEY/);if(!m)return k;const body=m[1].replace(/[^A-Za-z0-9+\/=]/g,'');return '-----BEGIN PRIVATE KEY-----\n'+body.match(/.{1,64}/g).join('\n')+'\n-----END PRIVATE KEY-----\n'};
 const loadSA=raw=>{let sa;try{sa=JSON.parse(raw)}catch(e){const fixed=raw.replace(/("private_key"\s*:\s*")([\s\S]*?)("\s*,\s*"client_email")/,(m,x,y,z)=>x+y.replace(/\r?\n/g,'\\n')+z);sa=JSON.parse(fixed)}if(sa.private_key)sa.private_key=fixKey(sa.private_key);return sa};
 try{const sa=loadSA(process.env.FIREBASE_SERVICE_ACCOUNT||''),pk=sa.private_key||'',len=pk.replace(/-----[A-Z ]+-----|\s/g,'').length;
  console.log('Controllo chiave: lunghezza',len,'(attesa circa 1624) | inizio corretto:',pk.startsWith('-----BEGIN PRIVATE KEY-----'),'| fine corretta:',/-----END PRIVATE KEY-----\s*$/.test(pk),'| client_email:',sa.client_email?'presente':'MANCANTE','| project_id:',sa.project_id||'MANCANTE');
