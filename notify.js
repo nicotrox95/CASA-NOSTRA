@@ -3,6 +3,10 @@ const mail=process.env.GMAIL_USER&&process.env.GMAIL_APP_PASSWORD?require('nodem
 const admin=require('firebase-admin');
 const fixKey=k=>{const m=String(k).match(/-----BEGIN PRIVATE KEY-----([\s\S]*?)-----END PRIVATE KEY-----/);if(!m)return k;const body=m[1].replace(/\\n/g,'').replace(/[^A-Za-z0-9+\/=]/g,'');return '-----BEGIN PRIVATE KEY-----\n'+body.match(/.{1,64}/g).join('\n')+'\n-----END PRIVATE KEY-----\n'};
 const loadSA=raw=>{let sa;try{sa=JSON.parse(raw)}catch(e){const fixed=raw.replace(/("private_key"\s*:\s*")([\s\S]*?)("\s*,\s*"client_email")/,(m,x,y,z)=>x+y.replace(/\r?\n/g,'\\n')+z);sa=JSON.parse(fixed)}if(sa.private_key)sa.private_key=fixKey(sa.private_key);return sa};
+try{const sa=loadSA(process.env.FIREBASE_SERVICE_ACCOUNT||''),pk=sa.private_key||'',len=pk.replace(/-----[A-Z ]+-----|\s/g,'').length;
+ console.log('Controllo chiave: lunghezza',len,'(attesa circa 1624) | inizio corretto:',pk.startsWith('-----BEGIN PRIVATE KEY-----'),'| fine corretta:',/-----END PRIVATE KEY-----\s*$/.test(pk),'| client_email:',sa.client_email?'presente':'MANCANTE','| project_id:',sa.project_id||'MANCANTE');
+ try{require('crypto').createPrivateKey(pk);console.log('Chiave privata: valida')}catch(e){console.log('ATTENZIONE: la chiave privata è danneggiata o incompleta. Rifai il segreto FIREBASE_SERVICE_ACCOUNT copiando di nuovo TUTTO il file JSON.')}}
+catch(e){console.log('ATTENZIONE: il segreto FIREBASE_SERVICE_ACCOUNT non è un JSON valido:',e.message)}
 admin.initializeApp({credential:admin.credential.cert(loadSA(process.env.FIREBASE_SERVICE_ACCOUNT))});
 const db=admin.firestore(),hr=new Date().getHours();
 if((hr<7||hr>=22)&&!process.env.FORCE&&!process.env.TEST){console.log('Fuori orario: nessun invio');process.exit(0)}
