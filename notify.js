@@ -1,7 +1,8 @@
 process.env.TZ='Europe/Rome';
 const mail=process.env.GMAIL_USER&&process.env.GMAIL_APP_PASSWORD?require('nodemailer').createTransport({service:'gmail',auth:{user:process.env.GMAIL_USER,pass:process.env.GMAIL_APP_PASSWORD}}):null;
 const admin=require('firebase-admin');
-admin.initializeApp({credential:admin.credential.cert(JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT))});
+const loadSA=raw=>{let sa;try{sa=JSON.parse(raw)}catch(e){const fixed=raw.replace(/("private_key"\s*:\s*")([\s\S]*?)("\s*,\s*"client_email")/,(m,x,y,z)=>x+y.replace(/\r?\n/g,'\\n')+z);sa=JSON.parse(fixed)}if(sa.private_key)sa.private_key=sa.private_key.replace(/\\n/g,'\n');return sa};
+admin.initializeApp({credential:admin.credential.cert(loadSA(process.env.FIREBASE_SERVICE_ACCOUNT))});
 const db=admin.firestore(),hr=new Date().getHours();
 if((hr<7||hr>=22)&&!process.env.FORCE&&!process.env.TEST){console.log('Fuori orario: nessun invio');process.exit(0)}
 const days=d=>Math.ceil((new Date(d.length>10?d:d+'T00:00')-Date.now())/864e5);
